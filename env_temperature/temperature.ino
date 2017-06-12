@@ -13,7 +13,7 @@
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 
-void set_color(uint8_t red,uint8_t green, uint8_t blue) {
+void set_color(uint8_t red, uint8_t green, uint8_t blue) {
     analogWrite(RED_PIN, 255 - red);
     analogWrite(GREEN_PIN, 255 - green);
     analogWrite(BLUE_PIN, 255 - blue);
