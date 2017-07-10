@@ -3,36 +3,24 @@
 #include "gpio.h"
 #include "os_type.h"
 
-// ESP-12 modules have LED on GPIO2. Change to another GPIO
-// for other boards.
-static const int pin = 2;
-static volatile os_timer_t some_timer;
+#define PIN 5u
 
-void some_timerfunc(void)
+static os_timer_t timer;
+
+static void toggle_pin(void)
 {
-    //Do blinky stuff
-    if (GPIO_REG_READ(GPIO_OUT_ADDRESS) & (1 << pin))
-    {
-        // set gpio low
-        gpio_output_set(0, (1 << pin), 0, 0);
-    }
+    if (GPIO_REG_READ(GPIO_OUT_ADDRESS) & (1 << PIN))
+        gpio_output_set(0, (1 << PIN), 0, 0);
     else
-    {
-        // set gpio high
-        gpio_output_set((1 << pin), 0, 0, 0);
-    }
+        gpio_output_set((1 << PIN), 0, 0, 0);
 }
 
-void ICACHE_FLASH_ATTR user_init(void)
+void user_init(void)
 {
-    // init gpio subsytem
     gpio_init();
-
-    // configure UART TXD to be GPIO1, set as output
-    PIN_FUNC_SELECT(PERIPHS_IO_MUX_U0TXD_U, FUNC_GPIO1);
-    gpio_output_set(0, 0, (1 << pin), 0);
-
-    // setup timer (500ms, repeating)
-    os_timer_setfn(&some_timer, some_timerfunc, NULL);
-    os_timer_arm(&some_timer, 500, 1);
+    /* PIN_FUNC_SELECT(PERIPHS_IO_MUX_MTDO_U, FUNC_GPIO5); */
+    gpio_output_set(0, 0, (1 << PIN), 0);
+    gpio_output_set(0, (1 << 2), (1 << 2), 0);
+    os_timer_setfn(&timer, toggle_pin, 0);
+    os_timer_arm(&timer, 200, 1);
 }
