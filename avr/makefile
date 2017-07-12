@@ -17,7 +17,7 @@ ${TARGET}.hex: ${TARGET}.o
 ${TARGET}.o: ${SOURCE}
 	@${CC} ${CFLAGS} -D DELAY=${DELAY} -o $@ $<
 
-clean: ${TARGET}.o ${TARGET}.hex
+clean:
 	@rm -vrf ${TARGET}.o ${TARGET}.hex
 
 flash: ${TARGET}.hex
