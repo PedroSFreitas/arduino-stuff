@@ -14,15 +14,15 @@ compile: $(HEX)
 	
 
 $(HEX): $(OBJ)
-	@avr-objcopy -O ihex $< $@
+	avr-objcopy -O ihex $< $@
 
 $(OBJ): $(SRC)
-	@$(CC) $(CFLAGS) -mmcu=$(MCU) $< -o $@
+	$(CC) $(CFLAGS) -mmcu=$(MCU) $< -o $@
 
 clean:
-	@rm -rf $(HEX) $(OBJ)
+	@rm -vrf $(HEX) $(OBJ)
 	
-flash:
-	@avrdude -P $(PORT) -c $(PROGRAMMER) -p $(MCU) -b $(BAUD) -D -U flash:w:$(HEX):i
+flash: $(HEX)
+	@avrdude -P $(PORT) -c $(PROGRAMMER) -p $(MCU) -b $(BAUD) -D -U flash:w:$(HEX):i -v
 
 .PHONY: compile clean flash
