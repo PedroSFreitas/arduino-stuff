@@ -1,26 +1,29 @@
 BAUD = 115200
 MCU = atmega2560
 PORT = /dev/ttyACM0
-TARGET = blinking
-SOURCE = ${TARGET}.c
 PROGRAMMER = wiring
 DELAY = 200
 
 CC = avr-gcc
-CFLAGS = -Wall -Wextra -Werror -mmcu=${MCU} -Os
+CFLAGS = -Wall -Wextra -Werror -mmcu=$(MCU) -Os
 
-all: ${TARGET}.hex
+TARGET = blinking
+SRC = $(TARGET).c
+OBJ = $(TARGET).o
+HEX = $(TARGET).hex
 
-${TARGET}.hex: ${TARGET}.o
-	@avr-objcopy -O ihex $< $@
+compile: $(HEX)
 
-${TARGET}.o: ${SOURCE}
-	@${CC} ${CFLAGS} -D DELAY=${DELAY} -o $@ $<
+$(HEX): $(OBJ)
+	avr-objcopy -O ihex $< $@
+
+$(OBJ): $(SRC)
+	$(CC) $(CFLAGS) -D DELAY=$(DELAY) -o $@ $<
 
 clean:
-	@rm -vrf ${TARGET}.o ${TARGET}.hex
+	@rm -vrf $(OBJ) $(HEX)
 
-flash: ${TARGET}.hex
-	@avrdude -v -p ${MCU} -P ${PORT} -D -U flash:w:${TARGET}.hex:i -c ${PROGRAMMER} -b ${BAUD}
+flash: $(HEX)
+	@avrdude -v -p $(MCU) -P $(PORT) -D -U flash:w:$(HEX):i -c $(PROGRAMMER) -b $(BAUD)
 
-.PHONY: clean all flash
+.PHONY: compile clean flash
