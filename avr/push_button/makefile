@@ -11,7 +11,7 @@ CC = avr-gcc
 CFLAGS = -Wall -Werror -pedantic -Os
 
 compile: $(HEX)
-	
+
 
 $(HEX): $(OBJ)
 	avr-objcopy -O ihex $< $@
@@ -21,7 +21,7 @@ $(OBJ): $(SRC)
 
 clean:
 	@rm -vrf $(HEX) $(OBJ)
-	
+
 flash: $(HEX)
 	@avrdude -P $(PORT) -c $(PROGRAMMER) -p $(MCU) -b $(BAUD) -D -U flash:w:$(HEX):i -v
 
