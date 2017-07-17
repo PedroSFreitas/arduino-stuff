@@ -12,7 +12,6 @@ CFLAGS = -Wall -Werror -pedantic -Os
 
 compile: $(HEX)
 
-
 $(HEX): $(OBJ)
 	avr-objcopy -O ihex $< $@
 
