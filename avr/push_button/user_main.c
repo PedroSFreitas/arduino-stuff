@@ -16,7 +16,7 @@ int main(void)
         if (PIND & (1<<PIND3)) { /* if PIND3 is high, turn LED off */
             /* PORTD &= ~(1<<PORTD2); */
             PIND |= (1<<PIND2);
-            _delay_ms(300);
         }
+        _delay_ms(300);
     }
 }
